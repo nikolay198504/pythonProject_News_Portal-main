@@ -140,7 +140,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
         # post_limit = Post.objects.filter(author=post.author, time_in__data=today).count()
         post_limit = Post.objects.filter(author=post.author, date_published__date=today).count()
         if post_limit >= 3:
-            return render(self.request, 'post-limit.html', {'author': post.author})
+            return render(self.request, 'post_limit.html', {'author': post.author})
         post.save()
         return super().form_valid(form)
 
