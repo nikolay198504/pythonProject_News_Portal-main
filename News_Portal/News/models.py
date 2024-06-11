@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import pgettext_lazy
+
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,6 +34,7 @@ class Post(models.Model):
     ]
     post_type = models.CharField(max_length=7, choices=POST_TYPE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    # time_in = models.DateTimeField(auto_now_add=True, verbose_name=pgettext_lazy('Time_in', 'Time_in'))
     date_published = models.DateTimeField(default=timezone.now)
     categories = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)

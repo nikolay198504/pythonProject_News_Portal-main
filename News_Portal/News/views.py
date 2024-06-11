@@ -1,6 +1,7 @@
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from email import message
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -132,6 +133,21 @@ class PostCreate(PermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        today = datetime.date.today()  # Используем datetime.date.today() для получения текущей даты
+        # post_limit = Post.objects.filter(author=post.author, time_in__data=today).count()
+        post_limit = Post.objects.filter(author=post.author, date_published__date=today).count()
+        if post_limit >= 3:
+            return render(self.request, 'post-limit.html', {'author': post.author})
+        post.save()
+        return super().form_valid(form)
+
+
+
+
+
 
 class ArticleCreate(PermissionRequiredMixin, CreateView):
     # Указываем нашу разработанную форму

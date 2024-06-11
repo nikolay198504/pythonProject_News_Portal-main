@@ -1,3 +1,5 @@
+from datetime import date
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -22,3 +24,12 @@ class PostForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     author = cleaned_data['author']
+    #     today = date.today()
+    #     post_limit = Post.objects.filter(author=author, date_published__date=today).count()
+    #     if post_limit >= 3:
+    #         raise ValidationError("Нельзя публиковать бльше трех постов в сутки!!!")
+    #     return cleaned_data

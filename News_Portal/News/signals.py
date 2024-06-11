@@ -1,11 +1,13 @@
+import datetime
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
 from email import message
 from django.conf import settings
-from .models import Category, PostCategory
+from .models import Category, PostCategory, Post
 
 
 # Отправка сообщений
@@ -39,3 +41,12 @@ def notify_about_new_post(sender, instance, **kwargs):
             subscribers_emails += [a.email for a in subscribers] # Добавление почт подписчиков
 
         send_notifications(instance.preview(), instance.pk, instance.title, subscribers_emails)
+
+
+# @receiver(pre_save, sender=Post)
+# def post_limit(sender, instance, **kwargs):
+#     today = datetime.date.today()
+#     post_limit = Post.objects.filter(author=instance.author, date_published__date=today).count()
+#     if post_limit >= 3:
+#         raise ValidationError('Нельзя публиковать бльше трех постов в сутки!!!')
+#
