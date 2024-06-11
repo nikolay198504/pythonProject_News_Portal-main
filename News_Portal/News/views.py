@@ -5,7 +5,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from datetime import datetime
+from datetime import datetime as dt
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy
@@ -54,7 +54,7 @@ class PostsList(ListView):
         # В ответе мы должны получить словарь.
         context = super().get_context_data(**kwargs)
         # К словарю добавим текущую дату в ключ 'time_now'.
-        context['time_now'] = datetime.utcnow()
+        context['time_now'] = dt.utcnow()
         # Добавим ещё одну пустую переменную,
         # чтобы на её примере рассмотреть работу ещё одного фильтра.
         context['next_sale'] = None
@@ -74,7 +74,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['time_now'] = datetime.utcnow()  # Добавляет текущую UTC дату и время
+        context['time_now'] = dt.utcnow()  # Добавляет текущую UTC дату и время
         return context
 
 
@@ -92,7 +92,7 @@ class PostSearch(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Добавляем текущую дату и время в ключ 'time_now'.
-        context['time_now'] = datetime.utcnow()
+        context['time_now'] = dt.utcnow()
         # Добавляем фильтр обратно в контекст.
         context['filterset'] = self.filterset
         # Добавляем queryset с отфильтрованными объектами в контекст.
@@ -114,7 +114,7 @@ class ChoosePostType(View):
             return redirect('news_create')
         return redirect('choose_post_type')
 
-class PostCreate(PermissionRequiredMixin, CreateView):
+class PostCreate(CreateView):
     permission_required = ('news.add_post',)
     # Указываем нашу разработанную форму
     form_class = PostForm
@@ -140,7 +140,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
         # post_limit = Post.objects.filter(author=post.author, time_in__data=today).count()
         post_limit = Post.objects.filter(author=post.author, date_published__date=today).count()
         if post_limit >= 3:
-            return render(self.request, 'post-limit.html', {'author': post.author})
+            return render(self.request, 'post_limit.html', {'author': post.author})
         post.save()
         return super().form_valid(form)
 
@@ -166,6 +166,17 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.pk})
+
+
+    def form_valid(self, form):
+        Article = form.save(commit=False)
+        today = datetime.date.today()  # Используем datetime.date.today() для получения текущей даты
+        # post_limit = Post.objects.filter(author=post.author, time_in__data=today).count()
+        post_limit = Post.objects.filter(author=Article.author, date_published__date=today).count()
+        if post_limit >= 3:
+            return render(self.request, 'post_limit.html', {'author': Article.author})
+        Article.save()
+        return super().form_valid(form)
 
 
 
