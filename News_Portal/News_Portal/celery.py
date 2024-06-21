@@ -15,7 +15,7 @@ app.conf.broker_connection_retry_on_startup = True
 app.conf.beat_scheldule = {
     'action_every_monday_8am': {
         'task': 'news_portal.tasks.weekly_send_email_task',
-        'scheldule': crontab(),
+        'scheldule': crontab(hour=8, minute=0, day_of_week='monday'),
         'args': ()
     }
 }
