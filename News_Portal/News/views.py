@@ -233,6 +233,6 @@ def subscribe(request, pk):
 
 class IndexView(View):
     def get(self, request):
-        printer.apply_async([10], countdown = 5)
+        printer.apply_async([10], countdown=5)
         hello.delay()
         return HttpResponse('Hello!')

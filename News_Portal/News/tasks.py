@@ -22,17 +22,18 @@ def printer(N):
 @shared_task
 def send_email_task(pk):
     post = Post.objects.get(pk=pk)
-    categories = post.post_category.all()
-    title = post.post_title
+    categories = post.category.all()
+    title = post.title
+    preview = post.preview()
     subscribers_emails = []
     for category in categories:
-        subscribers_users = category.subscribers.all()
-        for sub_user in subscribers_users:
-            subscribers_emails.append(sub_user.email)
+        subscribers = category.subscribers.all()
+        subscribers_emails += [s.email for s in subscribers]
+
     html_content = render_to_string(
         'post_created_email',
         {
-            'text': f'{post.post_title}',
+            'text': preview,
             'link': f'{settings.SITE_URL}/news/{pk}'
         }
     )
