@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\kolup\pythonProject_News_Portal\venv"
+VIRTUAL_ENV="C:\Users\kolup\OneDrive\Рабочий стол\pythonProject_News_Portal-main\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

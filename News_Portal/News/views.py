@@ -19,6 +19,11 @@ from django.shortcuts import get_object_or_404
 from .models import Post, Category
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.http import HttpResponse
+from django.views import View
+from .tasks import hello, printer
+
+
 class PostsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Post
@@ -225,3 +230,9 @@ def subscribe(request, pk):
     message = 'Вы подписались на категорию'
 
     return render(request, 'subscribe.html', {'category': category, 'message': message})
+
+class IndexView(View):
+    def get(self, request):
+        printer.apply_async([10], countdown = 5)
+        hello.delay()
+        return HttpResponse('Hello!')
