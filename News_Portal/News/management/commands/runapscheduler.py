@@ -1,8 +1,6 @@
 import datetime
 import logging
-
 from django.conf import settings
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.core.mail import EmailMultiAlternatives
@@ -10,7 +8,6 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
-
 from News.models import Post, Category
 
 logger = logging.getLogger(__name__)

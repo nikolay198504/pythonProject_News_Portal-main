@@ -12,10 +12,10 @@ app.autodiscover_tasks()
 # Добавляем настройку для устранения предупреждения о депрекации
 app.conf.broker_connection_retry_on_startup = True
 
-app.conf.beat_scheldule = {
+app.conf.beat_schedule = {
     'action_every_monday_8am': {
         'task': 'news_portal.tasks.weekly_send_email_task',
-        'scheldule': crontab(),
+        'schedule': crontab(),
         'args': ()
     }
 }
