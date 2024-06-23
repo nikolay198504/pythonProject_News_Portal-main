@@ -177,16 +177,10 @@ AUTHENTICATION_BACKENDS = [
 
 
 
-ACCOUNT_FORMS = {'signup': 'sign.models.CommonSignupForm'}
 
 SITE_URL = 'http://127.0.0.1:8000'
 
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

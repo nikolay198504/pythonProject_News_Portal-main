@@ -21,6 +21,7 @@ def printer(N):
 
 @shared_task
 def send_email_task(pk):
+    global subscribers
     post = Post.objects.get(pk=pk)
     categories = post.category.all()
     title = post.title
@@ -42,7 +43,7 @@ def send_email_task(pk):
         subject=title,
         body='',
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers_emails,
+        to=subscribers,
 )
 
     msg.attach_alternative(html_content, 'text/html')
