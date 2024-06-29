@@ -2,7 +2,6 @@
 # что в этом представлении мы будем выводить список объектов из БД
 from email import message
 import datetime
-
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from datetime import datetime as dt
@@ -18,7 +17,6 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from .models import Post, Category
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.http import HttpResponse
 from django.views import View
 from .tasks import hello, printer

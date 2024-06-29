@@ -3,6 +3,8 @@ from django.urls import path
 from .views import PostsList, PostDetail, PostSearch, PostCreate, PostUpdate, PostDelete, ArticleCreate, ChoosePostType, \
    CategoryListView, subscribe
 from .views import IndexView
+from django.views.decorators.cache import cache_page
+
 
 urlpatterns = [
    # path — означает путь.
