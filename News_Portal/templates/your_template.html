@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Template Tags Example</title>
+</head>
+<body>
+    {% load custom_extras %}
+
+    <p>{{ "Это пример текста с нежелательное слово в нем" | hide_forbidden }}</p>
+</body>
+</html>

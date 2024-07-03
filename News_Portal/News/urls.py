@@ -1,9 +1,10 @@
 from django.urls import path
 # Импортируем созданное нами представление
 from .views import PostsList, PostDetail, PostSearch, PostCreate, PostUpdate, PostDelete, ArticleCreate, ChoosePostType, \
-   CategoryListView, subscribe
+   CategoryListView, subscribe, trigger_error
 from .views import IndexView
 from django.views.decorators.cache import cache_page
+
 
 
 urlpatterns = [
@@ -27,7 +28,9 @@ urlpatterns = [
    path('choose/', ChoosePostType.as_view(), name='choose_post_type'),
    path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),
    path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
-   path('index/', IndexView.as_view())
+   path('index/', IndexView.as_view()),
+   path('trigger-error/', trigger_error),  # Маршрут для вызова ошибки
+
 
 
 ]

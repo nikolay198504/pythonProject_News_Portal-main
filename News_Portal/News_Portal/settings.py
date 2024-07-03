@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.vk',
     'django_apscheduler',
+    'News_Portal',
 
 ]
 
@@ -192,7 +193,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # Яндекс использует ssl, включать его здесь обязательно
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-
+SERVER_EMAIL = os.getenv('SERVER_EMAIL')
 
 # формат даты, которую будет воспринимать наш задачник (вспоминаем модуль по фильтрам)
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
@@ -213,5 +214,138 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
         'TIMEOUT': 30,
+    }
+}
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        }
+    },
+    "formatters": {
+        "console_debug": {
+            "format": "{asctime} {levelname} {message}",
+            "style": "{",
+        },
+        "console_warning": {
+            "format": "{asctime} {levelname} {pathname} {message}",
+            "style": "{",
+        },
+        "console_error": {
+            "format": "{asctime} {levelname} {pathname} {message} {exc_info}",
+            "style": "{",
+        },
+        "file_general": {
+            "format": "{asctime} {levelname} {module} {message}",
+            "style": "{",
+        },
+        "file_errors": {
+            "format": "{asctime} {levelname} {pathname} {message} {exc_info}",
+            "style": "{",
+        },
+        "file_security": {
+            "format": "{asctime} {levelname} {module} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console_debug": {
+            "level": "DEBUG",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console_debug",
+        },
+        "console_warning": {
+            "level": "WARNING",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console_warning",
+        },
+        "console_error": {
+            "level": "ERROR",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "console_error",
+        },
+        "file_general": {
+            "level": "INFO",
+            "filters": ["require_debug_false"],
+            "class": "logging.FileHandler",
+            "formatter": "file_general",
+            "filename": "general.log",
+        },
+        "file_errors": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "formatter": "file_errors",
+            "filename": "errors.log",
+        },
+        "file_security": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "formatter": "file_security",
+            "filename": "security.log",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+            "formatter": "file_errors",  # Использует тот же формат, что и файл ошибок
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console_debug", "console_warning", "console_error", "file_general"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["file_errors", "mail_admins"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["file_errors", "mail_admins"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.template": {
+            "handlers": ["file_errors"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["file_errors"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["file_security"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        # Настройка для ограничения логирования сторонних библиотек
+        "django.utils.autoreload": {
+            "handlers": ["console_debug"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "allauth": {
+            "handlers": ["console_debug"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["console_debug"],
+            "level": "INFO",
+            "propagate": False,
+        },
     }
 }

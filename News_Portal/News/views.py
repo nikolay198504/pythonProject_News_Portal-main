@@ -20,6 +20,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views import View
 from .tasks import hello, printer
+from django.urls import path
+from django.conf import settings
+import logging
+
+logger = logging.getLogger('django.request')
+
+def trigger_error(request):
+    try:
+        # Генерируем намеренную ошибку
+        raise ValueError("This is a test error!")
+    except ValueError as e:
+        # Логируем ошибку
+        logger.error("An error occurred: %s", e)
+    return HttpResponse("Ошибка вызвана и зарегистрирована.")
+
+
+
 
 
 class PostsList(ListView):

@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from News.views import trigger_error  # Импортируем trigger_error из приложения News
 
 
 urlpatterns = [
@@ -12,6 +13,7 @@ urlpatterns = [
     path('', include('protect.urls')),
     path('sign/', include('sign.urls')),
     path('accounts/', include('allauth.urls')),
+    path('trigger-error/', trigger_error),  # Маршрут для вызова ошибки
 
 
 
